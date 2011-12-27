@@ -1,0 +1,32 @@
+<project>
+
+
+    <target name="clean">
+        <delete dir="build"/>
+    </target>
+
+    <target name="compile">
+        <mkdir dir="build/classes"/>
+        <javac srcdir="src" destdir="build/classes">
+        <classpath>
+	<pathelement path="src/net/sf/gnukeyring/"/>
+    	<pathelement path="src/net/sf/astroinfo/pdb/"/>
+    	<pathelement path="src/com/Ostermiller/util/"/>
+        </classpath>
+      </javac>
+    </target>
+
+    <target name="jar">
+        <mkdir dir="build/jar"/>
+        <jar destfile="build/jar/export.jar" basedir="build/classes">
+            <manifest>
+                <attribute name="Main-Class" value="net.sf.gnukeyring.KeyringEntry"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run">
+        <java jar="build/jar/export.jar" fork="true"/>
+    </target>
+
+</project>

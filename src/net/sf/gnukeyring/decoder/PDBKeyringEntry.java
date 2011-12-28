@@ -30,7 +30,6 @@ import javax.crypto.*;
 import javax.crypto.spec.*;
 import javax.crypto.interfaces.*;
 
-
 public class PDBKeyringEntry implements KeyringEntry {
     PDBKeyringLibrary library;
     String keyname;
@@ -111,7 +110,7 @@ public class PDBKeyringEntry implements KeyringEntry {
 	if (index+2 <= encrypted.length)
 	    datetype =  (((encrypted[index] & 0xff) << 8) 
 			 | (encrypted[index+1] & 0xff));
-	Date changed = new Date((datetype>>9) + 4,
+	    Date changed = new Date((datetype>>9) + 4,
 				(datetype>>5) & 0x0f,
 				datetype & 0x1f);
 	fields.put("Changed", changed);

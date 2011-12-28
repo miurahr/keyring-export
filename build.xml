@@ -1,29 +1,56 @@
-<project>
+<project name="keyring-export" default="jar" basedir=".">
+
+  <!-- set global properties for this build -->
+  <property name="src" location="src"/>
+  <property name="build" location="build"/>
+  <property name="dist"  location="dist"/>
+  <property name="lib" location="lib"/>
+  <property name="build.tests" location="tests/build"/>
+  <property name="src.tests" location="tests/src"/>
+  <property name="reports.tests" location="tests/reports"/>
+
     <target name="clean">
-        <delete dir="build"/>
+        <delete dir="${build}"/>
+        <delete dir="${dist}"/>
     </target>
 
     <target name="compile">
-        <mkdir dir="build/classes"/>
-        <javac srcdir="src" destdir="build/classes">
+        <mkdir dir="${build}"/>
+        <javac srcdir="${src}" destdir="${build}">
           <classpath>
-	  <pathelement path="src/net/sf/gnukeyring/"/>
-    	  <pathelement path="src/net/sf/astroinfo/pdb/"/>
-    	  <pathelement path="src/com/Ostermiller/util/"/>
+          <pathelement location="${lib}/joda-time-2.0.jar"/>
+	  <pathelement path="${src}/"/>
         </classpath>
       </javac>
     </target>
 
-    <target name="jar">
-        <mkdir dir="build/jar"/>
-        <jar destfile="build/jar/export.jar" basedir="build/classes">
+    <target name="jar" depends="compile">
+        <mkdir dir="${dist}"/>
+        <jar destfile="${dist}/export.jar" basedir="${build}">
             <manifest>
                 <attribute name="Main-Class" value="net.sf.gnukeyring.export.Export"/>
             </manifest>
         </jar>
     </target>
 
-    <target name="run">
-        <java jar="build/jar/export.jar" fork="true"/>
+    <target name="run" depends="jar">
+        <java jar="${dist}/export.jar" fork="true"/>
     </target>
+
+<junit printsummary="yes" haltonfailure="yes">
+  <classpath>
+    <pathelement location="${build.tests}"/>
+    <pathelement path="${java.class.path}"/>	
+  </classpath>
+
+  <formatter type="plain"/>
+
+  <batchtest fork="yes" todir="${reports.tests}">
+    <fileset dir="${src.tests}">
+      <include name="**/*Test*.java"/>
+      <exclude name="**/AllTests.java"/>
+    </fileset>
+  </batchtest>
+</junit>
+
 </project>

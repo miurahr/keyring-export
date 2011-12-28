@@ -108,9 +108,10 @@ public class PDBKeyringEntry5 implements KeyringEntry {
 		case 3: {
 		    int datetype = (decrypted[index] & 0xff) << 8
 			| (decrypted[index+1] & 0xff);
-		    fields.put("Changed", new Date((datetype>>9) + 4,
-						   (datetype>>5) & 0x0f,
-						   datetype & 0x1f));
+            	    Date changed = new Date((datetype>>9) + 4,
+						   (datetype>>5) & 0x0f, 
+						   datetype & 0x1f);
+		    fields.put("Changed", changed);
 		    break;
 		}
 		case 1: {

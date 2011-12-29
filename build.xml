@@ -34,7 +34,14 @@
     </target>
 
     <target name="run" depends="jar">
-        <java jar="${dist}/export.jar" fork="true"/>
+        <java jar="${dist}/export.jar" fork="true">
+          <arg value="${arg0}"/>
+          <arg value="${arg1}"/>
+          <arg value="${arg2}"/>
+          <classpath>
+          <pathelement location="${lib}/joda-time-2.0.jar"/>
+        </classpath>
+	</java>
     </target>
 
 <junit printsummary="yes" haltonfailure="yes">

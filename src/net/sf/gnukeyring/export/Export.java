@@ -9,7 +9,7 @@ public abstract class Export {
 
     public static void main(String[] param) throws IOException {
 	if (param.length < 2 || param.length > 3) {
-	    System.err.println("USAGE: java net.sf.gnukeyring.export.Export <pdb-file> <password> [<outputfilename>.csv|xml|rml]");
+	    System.err.println("USAGE: java net.sf.gnukeyring.export.Export <pdb-file> <password> [<outputfilename>.csv|xml|rml|fpm]");
 	    return;
 	}
         Export exporter; 
@@ -21,6 +21,9 @@ public abstract class Export {
         }
 	else if (param[2].indexOf(".rml") != -1) {
 	    exporter = new RvlXMLExport();
+	}
+	else if (param[2].indexOf(".fpm") != -1) {
+	    exporter = new FpmXMLExport();
 	}
         else {
             System.err.println("Export format for '" + param[2] + "' unknown.");

@@ -5,9 +5,6 @@
   <property name="build" location="build"/>
   <property name="dist"  location="dist"/>
   <property name="lib" location="lib"/>
-  <property name="build.tests" location="tests/build"/>
-  <property name="src.tests" location="tests/src"/>
-  <property name="reports.tests" location="tests/reports"/>
 
     <target name="clean">
         <delete dir="${build}"/>
@@ -43,21 +40,5 @@
         </classpath>
 	</java>
     </target>
-
-<junit printsummary="yes" haltonfailure="yes">
-  <classpath>
-    <pathelement location="${build.tests}"/>
-    <pathelement path="${java.class.path}"/>	
-  </classpath>
-
-  <formatter type="plain"/>
-
-  <batchtest fork="yes" todir="${reports.tests}">
-    <fileset dir="${src.tests}">
-      <include name="**/*Test*.java"/>
-      <exclude name="**/AllTests.java"/>
-    </fileset>
-  </batchtest>
-</junit>
 
 </project>

@@ -47,43 +47,52 @@ public class RvlXMLExport extends Export {
     }
 
     public void exportEntries() throws IOException {
+	List entries = keylib.getEntries();
 	Set categories= keylib.getCategories();
 	Date now = new Date();
-	String nowString = String.valueOf(now.getTime());
-	
+	String nowString = String.valueOf((long)(now.getTime()/1000L));
+
 	for (Iterator i = categories.iterator(); i.hasNext(); ) {
-		String c = i.next().toString();
+		Object o = i.next();
+        if (o != null) {
+        String c = o.toString();
 
 		writer.write("<entry type=\"folder\">\n");
 	    writer.write("  <name>"+xmlencode(c)+"</name>\n");
 		writer.write("  <description></description>\n");
 		writer.write("  <updated>"+nowString+"</updated>\n");
-
-		List entries = keylib.getEntries(c);
-
+	
 		for (Iterator j = entries.iterator(); j.hasNext(); ) {
 	    	KeyringEntry entry = (KeyringEntry) j.next();
+	   	    String category = (String) entry.getCategory();
 
+            if (category.equals(c)) {
 	    	writer.write("  <entry type=\"generic\">\n");
 	    	writer.write("    <name>"+xmlencode(entry.getName())+"</name>\n");
-	    	String category = (String) entry.getCategory();
 	    	String account = (String) entry.getField("Account");
 			String password = (String) entry.getField("Password");
 	    	Date   changed = (Date) entry.getField("Changed");
-			String updated = String.valueOf(changed.getTime());
 	    	String notes = (String) entry.getField("Notes");
-	    	if (notes != null)
-			writer.write("    <description>"+xmlencode(notes)+"</description>\n");
-	    	if (changed != null)
-			writer.write("    <updated>"+updated+"</updated>\n");
+	    	if (notes != null) {
+                if ((password !=null) && notes.equals(password)) {
+			    writer.write("    <description></description>\n");
+                } else {
+			    writer.write("    <description>"+xmlencode(notes)+"</description>\n");
+                }
+            }
+	    	if (changed != null) {
+			    String updated = String.valueOf((long)(changed.getTime()/1000L));
+			    writer.write("    <updated>"+updated+"</updated>\n");
+            }
 	    	if (account != null)
-			writer.write("    <field id=\"generic-username\">"+xmlencode(account)+"</field>\n");
+			    writer.write("    <field id=\"generic-username\">"+xmlencode(account)+"</field>\n");
 	    	if (password != null)
-			writer.write("    <field id=\"generic-password\">"+xmlencode(password)+"</field>\n");
-	    	writer.write("  </entry>\n");
+			    writer.write("    <field id=\"generic-password\">"+xmlencode(password)+"</field>\n");
+	    	    writer.write("  </entry>\n");
+            }
 		}
-
-    	writer.write("</entry>\n");
+        }
+   	writer.write("</entry>\n");
 	}
     }
 }
